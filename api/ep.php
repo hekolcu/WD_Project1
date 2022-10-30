@@ -58,3 +58,47 @@ function addCarForSale(){
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
+function deleteCarForSale($id){
+    try {
+        global $db;
+        // select sold from cars_for_sale where car_id = $id
+        $stmt = $db->prepare(
+            "SELECT sold FROM cars_for_sale WHERE car_id = :id"
+        );
+        $stmt->bindParam("id", $id);
+        $stmt->execute();
+        $carForSale = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($carForSale['sold'] == 0) {
+            // delete from cars_for_sale where car_id = $id
+            $stmt = $db->prepare(
+                "DELETE FROM cars_for_sale WHERE car_id = :id"
+            );
+            $stmt->bindParam("id", $id);
+            $stmt->execute();
+            echo '{"success":{"text":"Car for sale deleted"}}';
+        } else {
+            echo '{"error":{"text":"Car for sale already sold"}}';
+        }
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
+
+function sellCar($id){
+    try {
+        global $db;
+        $stmt = $db->prepare(
+            "UPDATE cars_for_sale SET sold = 1 WHERE car_id = :id"
+        );
+        $stmt->bindParam("id", $id);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            echo '{"success":{"text":"Car sold"}}';
+        } else {
+            echo '{"error":{"text":"Car not found"}}';
+        }
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
