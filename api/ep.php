@@ -3,7 +3,7 @@
 function getCarsForSale() {
     global $db;
     try {
-        $stmt = $db->query("SELECT * FROM cars_for_sale");
+        $stmt = $db->query("SELECT car_id, seller_id, title, price, description, model, color, state, production_date, purchase_date, post_date FROM cars_for_sale WHERE sold = 0");
         $carsForSale = $stmt->fetchAll(PDO::FETCH_ASSOC);
         header("Content-Type: application/json");
         echo json_encode($carsForSale);
@@ -16,7 +16,7 @@ function getCarForSale($id) {
     global $db;
     try {
         $stmt = $db->prepare(
-            "SELECT * FROM cars_for_sale WHERE car_id = :id"
+            "SELECT * FROM cars_for_sale WHERE car_id = :id where sold = 0"
         );
         $stmt->bindParam("id", $id);
         $stmt->execute();
