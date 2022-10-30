@@ -1,6 +1,6 @@
 <?php
 require 'Slim/Slim.php';
-require './carsEndPoints.php';
+require './ep.php';
 require 'database.php';
 
 use Slim\Slim;
@@ -8,6 +8,6 @@ use Slim\Slim;
 
 $app = new Slim();
 
-$app->get('/runners', 'getRunners');
+$app->get('/carsForSale', 'getCarsForSale');
 
 $app->run();
