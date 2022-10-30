@@ -12,6 +12,7 @@ $app->get('/carsForSale', 'getCarsForSale');
 $app->get('/carsForSale/:id', 'getCarForSale');
 
 $app->post('/carsForSale', 'addCarForSale');
+$app->post('/addCarPhoto/:car_id', 'addCarPhoto');
 
 $app->delete('/carsForSale/:id', 'deleteCarForSale');
 

@@ -143,3 +143,29 @@ function updateCarForSale($id){
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
+function addCarPhoto($car_id){
+    global $app;
+    $request = $app->request();
+    $carPhoto = json_decode($request->getBody());
+    try {
+        global $db;
+        $stmt = $db->prepare(
+            "INSERT INTO car_pictures 
+                (car_id, dir) 
+            VALUES 
+                (:car_id, :dir)"
+        );
+        $stmt->bindParam("car_id", $car_id);
+        $stmt->bindParam("dir", $carPhoto->dir);
+        $stmt->execute();
+        header("Content-Type: application/json");
+        if ($stmt->rowCount() > 0) {
+            echo '{"success":{"text":"Car photo added"}}';
+        } else {
+            echo '{"error":{"text":"Car photo not added"}}';
+        }
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
