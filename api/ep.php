@@ -102,3 +102,44 @@ function sellCar($id){
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
+function updateCarForSale($id){
+    global $app;
+    $request = $app->request();
+    $carForSale = json_decode($request->getBody());
+    try {
+        global $db;
+        $stmt = $db->prepare(
+            "UPDATE cars_for_sale 
+            SET 
+                seller_id = :seller_id, 
+                title = :title, 
+                price = :price, 
+                description = :description, 
+                model = :model, 
+                color = :color, 
+                state = :state, 
+                production_date = :production_date, 
+                purchase_date = :purchase_date 
+            WHERE car_id = :id and sold = 0"
+        );
+        $stmt->bindParam("id", $id);
+        $stmt->bindParam("seller_id", $carForSale->seller_id);
+        $stmt->bindParam("title", $carForSale->title);
+        $stmt->bindParam("price", $carForSale->price);
+        $stmt->bindParam("description", $carForSale->description);
+        $stmt->bindParam("model", $carForSale->model);
+        $stmt->bindParam("color", $carForSale->color);
+        $stmt->bindParam("state", $carForSale->state);
+        $stmt->bindParam("production_date", $carForSale->production_date);
+        $stmt->bindParam("purchase_date", $carForSale->purchase_date);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            echo '{"success":{"text":"Car for sale updated"}}';
+        } else {
+            echo '{"error":{"text":"Car for sale not found or already sold"}}';
+        }
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
