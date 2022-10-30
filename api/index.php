@@ -9,5 +9,6 @@ use Slim\Slim;
 $app = new Slim();
 
 $app->get('/carsForSale', 'getCarsForSale');
+$app->get('/carsForSale/:id', 'getCarForSale');
 
 $app->run();
