@@ -11,4 +11,7 @@ $app = new Slim();
 $app->get('/carsForSale', 'getCarsForSale');
 $app->get('/carsForSale/:id', 'getCarForSale');
 
+$app->post('/carsForSale', 'addCarForSale');
+
+
 $app->run();
