@@ -169,3 +169,22 @@ function addCarPhoto($car_id){
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
+function deleteCarPhoto($car_id, $pic_id){
+    try {
+        global $db;
+        $stmt = $db->prepare(
+            "DELETE FROM car_pictures WHERE car_id = :car_id and pic_id = :pic_id"
+        );
+        $stmt->bindParam("car_id", $car_id);
+        $stmt->bindParam("pic_id", $pic_id);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            echo '{"success":{"text":"Car photo deleted"}}';
+        } else {
+            echo '{"error":{"text":"Car photo not found"}}';
+        }
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}

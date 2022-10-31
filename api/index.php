@@ -15,6 +15,7 @@ $app->post('/carsForSale', 'addCarForSale');
 $app->post('/addCarPhoto/:car_id', 'addCarPhoto');
 
 $app->delete('/carsForSale/:id', 'deleteCarForSale');
+$app->delete('/deleteCarPhoto/:car_id/:pic_id', 'deleteCarPhoto');
 
 $app->put('/carsForSale/:id', 'updateCarForSale');
 $app->put('/sellCar/:id', 'sellCar');
