@@ -188,3 +188,139 @@ function deleteCarPhoto($car_id, $pic_id){
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
+function registerAdmin(){
+    global $app;
+    $request = $app->request();
+    $admin = json_decode($request->getBody());
+    try {
+        global $db;
+        $stmt = $db->prepare(
+            "INSERT INTO users 
+                (email, password, name) 
+            VALUES 
+                (:email, :password, :name)"
+        );
+        $stmt->bindParam("email", $admin->email);
+        $stmt->bindParam("password", $admin->password);
+        $stmt->bindParam("name", $admin->name);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $admin->id = $db->lastInsertId();
+            $stmt = $db->prepare(
+                "INSERT INTO admins 
+                    (id) 
+                VALUES 
+                    (:id)"
+            );
+            $stmt->bindParam("id", $admin->id);
+            $stmt->execute();
+            header("Content-Type: application/json");
+            if ($stmt->rowCount() > 0) {
+                echo json_encode($admin);
+            } else {
+                $stmt = $db->prepare(
+                    "DELETE FROM users WHERE id = :id"
+                );
+                $stmt->bindParam("id", $admin->id);
+                $stmt->execute();
+                echo '{"error":{"text":"Admin not registered"}}';
+            }
+        } else {
+            echo '{"error":{"text":"Admin not registered"}}';
+        }
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
+
+function registerBuyer(){
+    global $app;
+    $request = $app->request();
+    $buyer = json_decode($request->getBody());
+    try {
+        global $db;
+        $stmt = $db->prepare(
+            "INSERT INTO users 
+                (email, password, name) 
+            VALUES 
+                (:email, :password, :name)"
+        );
+        $stmt->bindParam("email", $buyer->email);
+        $stmt->bindParam("password", $buyer->password);
+        $stmt->bindParam("name", $buyer->name);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $buyer->id = $db->lastInsertId();
+            $stmt = $db->prepare(
+                "INSERT INTO buyers 
+                    (id) 
+                VALUES 
+                    (:id)"
+            );
+            $stmt->bindParam("id", $buyer->id);
+            $stmt->execute();
+            header("Content-Type: application/json");
+            if ($stmt->rowCount() > 0) {
+                echo json_encode($buyer);
+            } else {
+                $stmt = $db->prepare(
+                    "DELETE FROM users WHERE id = :id"
+                );
+                $stmt->bindParam("id", $buyer->id);
+                $stmt->execute();
+                echo '{"error":{"text":"Buyer not registered"}}';
+            }
+        } else {
+            echo '{"error":{"text":"Buyer not registered"}}';
+        }
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
+
+function registerSeller(){
+    global $app;
+    $request = $app->request();
+    $seller = json_decode($request->getBody());
+    try {
+        global $db;
+        $stmt = $db->prepare(
+            "INSERT INTO users 
+                (email, password, name) 
+            VALUES 
+                (:email, :password, :name)"
+        );
+        $stmt->bindParam("email", $seller->email);
+        $stmt->bindParam("password", $seller->password);
+        $stmt->bindParam("name", $seller->name);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $seller->id = $db->lastInsertId();
+            $stmt = $db->prepare(
+                "INSERT INTO sellers 
+                    (id, company) 
+                VALUES 
+                    (:id, :company)"
+            );
+            $stmt->bindParam("id", $seller->id);
+            $stmt->bindParam("company", $seller->company);
+            $stmt->execute();
+            header("Content-Type: application/json");
+            if ($stmt->rowCount() > 0) {
+                echo json_encode($seller);
+            } else {
+                $stmt = $db->prepare(
+                    "DELETE FROM users WHERE id = :id"
+                );
+                $stmt->bindParam("id", $seller->id);
+                $stmt->execute();
+                echo '{"error":{"text":"Seller not registered"}}';
+            }
+        } else {
+            echo '{"error":{"text":"Seller not registered"}}';
+        }
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}

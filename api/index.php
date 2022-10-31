@@ -13,6 +13,9 @@ $app->get('/carsForSale/:id', 'getCarForSale');
 
 $app->post('/carsForSale', 'addCarForSale');
 $app->post('/addCarPhoto/:car_id', 'addCarPhoto');
+$app->post('/registerAdmin', 'registerAdmin');
+$app->post('/registerSeller', 'registerSeller');
+$app->post('/registerBuyer', 'registerBuyer');
 
 $app->delete('/carsForSale/:id', 'deleteCarForSale');
 $app->delete('/deleteCarPhoto/:car_id/:pic_id', 'deleteCarPhoto');
