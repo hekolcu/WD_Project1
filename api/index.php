@@ -20,6 +20,7 @@ $app->post('/addRoleToUser/:id', 'addRole');
 
 $app->delete('/carsForSale/:id', 'deleteCarForSale');
 $app->delete('/deleteCarPhoto/:car_id/:pic_id', 'deleteCarPhoto');
+$app->delete('/deleteRoleFromUser/:id', 'deleteRole');
 
 $app->put('/carsForSale/:id', 'updateCarForSale');
 $app->put('/sellCar/:id', 'sellCar');

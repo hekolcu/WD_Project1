@@ -367,3 +367,36 @@ function addRole($id){
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
+function deleteRole($id){
+    global $app;
+    $request = $app->request();
+    $body = json_decode($request->getBody());
+    try {
+        global $db;
+        if ($body->role == "admin"){
+            $stmt = $db->prepare(
+                "DELETE FROM admins WHERE id = :id"
+            );
+        }
+        else if ($body->role == "buyer"){
+            $stmt = $db->prepare(
+                "DELETE FROM buyers WHERE id = :id"
+            );
+        }
+        else if ($body->role == "seller"){
+            $stmt = $db->prepare(
+                "DELETE FROM sellers WHERE id = :id"
+            );
+        }
+        $stmt->bindParam("id", $id);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            echo '{"success":{"text":"' , $body->role , ' Role deleted"}}';
+        } else {
+            echo '{"error":{"text":"' , $body->role , ' Role not deleted"}}';
+        }
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
