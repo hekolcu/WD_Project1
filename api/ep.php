@@ -324,3 +324,46 @@ function registerSeller(){
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
+function addRole($id){
+    global $app;
+    $request = $app->request();
+    $body = json_decode($request->getBody());
+    try {
+        global $db;
+        if ($body->role == "admin"){
+            $stmt = $db->prepare(
+                "INSERT INTO admins 
+                    (id) 
+                VALUES 
+                    (:id)"
+            );
+        }
+        else if ($body->role == "buyer"){
+            $stmt = $db->prepare(
+                "INSERT INTO buyers 
+                    (id) 
+                VALUES 
+                    (:id)"
+            );
+        }
+        else if ($body->role == "seller"){
+            $stmt = $db->prepare(
+                "INSERT INTO sellers 
+                    (id, company) 
+                VALUES 
+                    (:id, :company)"
+            );
+            $stmt->bindParam("company", $body->company);
+        }
+        $stmt->bindParam("id", $id);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            echo '{"success":{"text":"' , $body->role , ' Role added"}}';
+        } else {
+            echo '{"error":{"text":"' , $body->role , ' Role not added"}}';
+        }
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
