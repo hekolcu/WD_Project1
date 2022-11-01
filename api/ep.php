@@ -96,7 +96,7 @@ function sellCar($id){
         if ($stmt->rowCount() > 0) {
             echo '{"success":{"text":"Car sold"}}';
         } else {
-            echo '{"error":{"text":"Car not found"}}';
+            echo '{"error":{"text":"Car not found or already sold"}}';
         }
     } catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
