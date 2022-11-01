@@ -10,6 +10,7 @@ $app = new Slim();
 
 $app->get('/carsForSale', 'getCarsForSale');
 $app->get('/carsForSale/:id', 'getCarForSale');
+$app->get('/carsForSale/search/:query', 'getCarsForSaleSearch');
 
 $app->post('/carsForSale', 'addCarForSale');
 $app->post('/addCarPhoto/:car_id', 'addCarPhoto');

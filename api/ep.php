@@ -400,3 +400,33 @@ function deleteRole($id){
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
+function getCarsForSaleSearch($search){
+    try {
+        global $db;
+        $stmt = $db->prepare(
+            "SELECT 
+                car_id, seller_id, title, price, description, model, color, state, production_date, purchase_date, post_date, sold 
+            FROM 
+                cars_for_sale 
+            WHERE 
+                title LIKE :search
+                OR 
+                description LIKE :search
+                OR
+                model LIKE :search
+                OR
+                color LIKE :search
+                OR
+                state LIKE :search"
+        );
+        $search = '%' . $search . '%';
+        $stmt->bindParam("search", $search);
+        $stmt->execute();
+        $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        header("Content-Type: application/json");
+        echo json_encode($cars);
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
