@@ -16,13 +16,29 @@ function getCarForSale($id) {
     global $db;
     try {
         $stmt = $db->prepare(
-            "SELECT * FROM cars_for_sale WHERE car_id = :id where sold = 0"
+            "SELECT * FROM cars_for_sale WHERE car_id = :id and sold = 0"
         );
         $stmt->bindParam("id", $id);
         $stmt->execute();
         $carForSale = $stmt->fetch(PDO::FETCH_ASSOC);
         header("Content-Type: application/json");
         echo json_encode($carForSale);
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
+
+function getCarPhotos($id){
+    global $db;
+    try {
+        $stmt = $db->prepare(
+            "SELECT pic_id, dir FROM car_pictures WHERE car_id = :id"
+        );
+        $stmt->bindParam("id", $id);
+        $stmt->execute();
+        $carPhotos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        header("Content-Type: application/json");
+        echo json_encode($carPhotos);
     } catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
@@ -166,7 +182,7 @@ function addCarPhoto($car_id){
             echo '{"error":{"text":"Car photo not added"}}';
         }
     } catch(PDOException $e) {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
+        echo '{"error":{"text":"Duplicate photo."}}';
     }
 }
 
